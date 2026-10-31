@@ -1,0 +1,28 @@
+<style>
+.pp-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:1rem var(--espaco);background:var(--azul-noite);color:var(--offwhite)}
+.pp-logo{font-family:var(--fonte-titulo);font-weight:700;font-size:1.4rem;color:var(--offwhite);text-decoration:none}
+.pp-logo span{color:var(--coral)}
+.pp-toggle{background:none;border:2px solid var(--offwhite);color:var(--offwhite);border-radius:8px;padding:.4rem .8rem;font-size:1.2rem;cursor:pointer}
+.pp-menu{display:none;width:100%;flex-direction:column;gap:.5rem;padding-top:1rem}
+.pp-menu.aberto{display:flex}
+.pp-menu a{color:var(--offwhite);text-decoration:none;padding:.5rem 0}
+.pp-menu a:hover{color:#FF8A65}
+.pp-menu .pp-btn{border:2px solid var(--coral);border-radius:var(--raio);padding:.5rem 1.2rem;font-weight:600;text-align:center}
+.pp-menu .pp-btn:hover{background:#FF8A65;color:var(--azul-noite)}
+@media (min-width:768px){.pp-toggle{display:none}.pp-menu{display:flex;flex-direction:row;align-items:center;width:auto;padding-top:0;gap:1.5rem}}
+</style>
+<div class="pp-bar">
+<a class="pp-logo" href="#hero">Pixel <span>&amp;</span> Prosa</a>
+<button class="pp-toggle" type="button" aria-expanded="false" aria-controls="pp-menu" aria-label="Abrir menu">&#9776;</button>
+<nav id="pp-menu" class="pp-menu" aria-label="Principal">
+<a href="#servicos">Servi&ccedil;os</a>
+<a href="#recomendador">Descubra o seu</a>
+<a href="#como-funciona">Como funciona</a>
+<a class="pp-btn" href="#contato">Fale conosco</a>
+</nav>
+</div>
+<script>
+(function(){var b=document.querySelector('.pp-toggle'),m=document.getElementById('pp-menu');if(!b||!m)return;
+b.addEventListener('click',function(){var o=m.classList.toggle('aberto');b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Fechar menu':'Abrir menu')});
+m.addEventListener('click',function(e){if(e.target.tagName==='A'){m.classList.remove('aberto');b.setAttribute('aria-expanded','false')}});})();
+</script>
