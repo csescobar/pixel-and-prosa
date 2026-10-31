@@ -1,0 +1,74 @@
+<style>
+.pp-rec{background:var(--azul-noite);color:var(--offwhite);padding:clamp(3rem,8vw,5rem) var(--espaco)}
+.pp-rec-in{max-width:760px;margin:0 auto}
+.pp-rec h2{font-size:clamp(1.6rem,4vw,2.5rem);margin:0 0 .5rem}
+.pp-rec-sub{margin:0 0 2rem;color:#D8DEE9}
+.pp-q{border:0;margin:0 0 1.75rem;padding:0}
+.pp-q legend{font-family:var(--fonte-titulo);font-weight:600;font-size:1.15rem;margin-bottom:.75rem;padding:0}
+.pp-op{display:flex;align-items:center;gap:.75rem;padding:.8rem 1rem;margin-bottom:.5rem;background:rgba(255,255,255,.08);border:2px solid transparent;border-radius:var(--raio);cursor:pointer;transition:background .2s,border-color .2s}
+.pp-op:hover{background:rgba(255,255,255,.16)}
+.pp-op:has(input:checked){border-color:var(--coral);background:rgba(228,87,46,.18)}
+.pp-op input{accent-color:var(--coral);width:1.25rem;height:1.25rem;flex-shrink:0}
+.pp-enviar,.pp-ir{background:var(--coral);color:var(--azul-noite);border:0;border-radius:var(--raio);padding:.9rem 1.6rem;font-weight:700;font-size:1.2rem;font-family:inherit;cursor:pointer}
+.pp-refazer{background:none;color:inherit;border:2px solid currentColor;border-radius:var(--raio);padding:.8rem 1.4rem;font-weight:600;font-size:1rem;font-family:inherit;cursor:pointer}
+.pp-enviar:hover,.pp-ir:hover{filter:brightness(1.08)}
+.pp-erro{color:#FFC9B8;font-weight:600;min-height:1.5rem;margin:1rem 0 0}
+.pp-resultado{margin-top:1rem}
+.pp-resultado:focus{outline:none}
+.pp-res-card{background:var(--offwhite);color:var(--azul-noite);border-radius:var(--raio);padding:1.5rem;border-left:8px solid var(--coral)}
+.pp-res-card h3{margin:0 0 .5rem;font-size:1.5rem}
+.pp-res-card p{margin:0 0 1rem;color:var(--cinza)}
+.pp-res-card ul{margin:0 0 1.25rem;padding-left:1.25rem}
+.pp-acoes{display:flex;flex-wrap:wrap;gap:1rem}
+.pp-res-card .pp-refazer{color:var(--azul-noite)}
+.pp-card.pp-reco{outline:3px solid var(--coral);outline-offset:4px}
+</style>
+<div class="pp-rec"><div class="pp-rec-in">
+<h2>Descubra o servi&ccedil;o ideal para voc&ecirc;</h2>
+<p class="pp-rec-sub">Responda 4 perguntas r&aacute;pidas e receba uma recomenda&ccedil;&atilde;o na hora.</p>
+<form id="pp-form-rec" novalidate>
+<fieldset class="pp-q"><legend>1. Qual &eacute; o seu principal objetivo agora?</legend><label class="pp-op"><input type="radio" name="q1" value="0" data-p="identidade:3"><span>Criar ou renovar a minha marca</span></label><label class="pp-op"><input type="radio" name="q1" value="1" data-p="social:3"><span>Aparecer mais nas redes sociais</span></label><label class="pp-op"><input type="radio" name="q1" value="2" data-p="site:3"><span>Ter um site para receber contatos</span></label><label class="pp-op"><input type="radio" name="q1" value="3" data-p="completo:4"><span>Resolver tudo de uma vez</span></label></fieldset>
+<fieldset class="pp-q"><legend>2. Em que fase est&aacute; o seu neg&oacute;cio?</legend><label class="pp-op"><input type="radio" name="q2" value="0" data-p="identidade:2,site:1,completo:1"><span>Estou come&ccedil;ando e ainda n&atilde;o tenho marca</span></label><label class="pp-op"><input type="radio" name="q2" value="1" data-p="identidade:2,social:1"><span>J&aacute; existo, mas sem padr&atilde;o visual</span></label><label class="pp-op"><input type="radio" name="q2" value="2" data-p="social:2,site:1"><span>Tenho marca, mas pouca presen&ccedil;a online</span></label><label class="pp-op"><input type="radio" name="q2" value="3" data-p="completo:2,social:1"><span>Neg&oacute;cio consolidado, quero crescer</span></label></fieldset>
+<fieldset class="pp-q"><legend>3. Como voc&ecirc; prefere investir?</legend><label class="pp-op"><input type="radio" name="q3" value="0" data-p="identidade:1,site:2"><span>Um valor &uacute;nico e enxuto</span></label><label class="pp-op"><input type="radio" name="q3" value="1" data-p="social:3"><span>Um valor mensal fixo</span></label><label class="pp-op"><input type="radio" name="q3" value="2" data-p="completo:3"><span>Posso investir mais por um resultado completo</span></label></fieldset>
+<fieldset class="pp-q"><legend>4. Qual &eacute; o seu ritmo ideal?</legend><label class="pp-op"><input type="radio" name="q4" value="0" data-p="site:2,identidade:1"><span>Algo r&aacute;pido e pontual</span></label><label class="pp-op"><input type="radio" name="q4" value="1" data-p="social:3"><span>Acompanhamento cont&iacute;nuo, m&ecirc;s a m&ecirc;s</span></label><label class="pp-op"><input type="radio" name="q4" value="2" data-p="completo:3"><span>Um projeto completo, feito com calma</span></label></fieldset>
+<button type="submit" class="pp-enviar">Ver minha recomenda&ccedil;&atilde;o</button>
+<p id="pp-erro" class="pp-erro" role="alert"></p>
+</form>
+<div id="pp-resultado" class="pp-resultado" aria-live="polite" tabindex="-1"></div>
+</div></div>
+<script>
+(function(){
+var f=document.getElementById('pp-form-rec'),r=document.getElementById('pp-resultado'),e=document.getElementById('pp-erro');if(!f)return;
+var S={
+identidade:{nome:'Identidade Visual',txt:'Logo, paleta de cores e manual b&aacute;sico para a sua marca ser reconhecida em qualquer lugar.'},
+social:{nome:'Social Media',txt:'Calend&aacute;rio de posts, artes e legendas todo m&ecirc;s para manter o seu perfil ativo e coerente.'},
+site:{nome:'Site Express',txt:'Uma p&aacute;gina r&aacute;pida, bonita e responsiva para apresentar o seu neg&oacute;cio e receber contatos.'},
+completo:{nome:'Pacote Completo',txt:'Identidade, redes sociais e site juntos, com desconto e tudo no mesmo estilo.'}};
+var ordem=['identidade','social','site','completo'];
+function limpar(){r.innerHTML='';[].forEach.call(document.querySelectorAll('.pp-card'),function(c){c.classList.remove('pp-reco')});}
+f.addEventListener('submit',function(ev){
+ev.preventDefault();
+var pts={identidade:0,social:0,site:0,completo:0},resp=[],qs=f.querySelectorAll('fieldset');
+for(var i=0;i<qs.length;i++){
+var c=qs[i].querySelector('input:checked');
+if(!c){e.textContent='Responda a pergunta '+(i+1)+' para continuar.';qs[i].querySelector('input').focus();return;}
+var m={};
+c.getAttribute('data-p').split(',').forEach(function(p){var kv=p.split(':');m[kv[0]]=+kv[1];pts[kv[0]]+=+kv[1];});
+resp.push({txt:c.parentNode.textContent.trim(),m:m});}
+e.textContent='';
+var venc=ordem[0];
+ordem.forEach(function(k){if(pts[k]>pts[venc])venc=k;});
+var porque=resp.filter(function(a){return a.m[venc]}).sort(function(a,b){return b.m[venc]-a.m[venc]}).slice(0,2);
+var s=S[venc];
+r.innerHTML='<div class="pp-res-card"><h3>Recomendamos: '+s.nome+'</h3><p>'+s.txt+'</p><p><strong>Por que este?</strong> Voc&ecirc; respondeu:</p><ul>'+porque.map(function(a){return '<li>'+a.txt+'</li>'}).join('')+'</ul><div class="pp-acoes"><button type="button" class="pp-ir">Quero este servi&ccedil;o</button><button type="button" class="pp-refazer">Refazer</button></div></div>';
+[].forEach.call(document.querySelectorAll('.pp-card'),function(c){c.classList.toggle('pp-reco',c.getAttribute('data-servico')===venc)});
+window.ppRecomendacao=s.nome;
+r.focus();
+r.querySelector('.pp-ir').addEventListener('click',function(){
+var sel=document.getElementById('pp-servico');if(sel)sel.value=s.nome;
+var alvo=document.getElementById('contato');if(alvo)alvo.scrollIntoView();
+if(sel)setTimeout(function(){sel.focus()},400);});
+r.querySelector('.pp-refazer').addEventListener('click',function(){f.reset();limpar();window.ppRecomendacao='';f.querySelector('input').focus();});
+});
+})();
+</script>
