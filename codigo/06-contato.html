@@ -1,0 +1,46 @@
+<style>
+.pp-contato{padding:clamp(3rem,8vw,5rem) var(--espaco);max-width:640px;margin:0 auto}
+.pp-contato h2{font-size:clamp(1.6rem,4vw,2.5rem);margin:0 0 .5rem}
+.pp-contato .pp-sub{margin-bottom:2rem}
+.pp-campo{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1.1rem}
+.pp-campo label{font-weight:600}
+.pp-campo input,.pp-campo select,.pp-campo textarea{box-sizing:border-box;padding:.8rem;border:2px solid var(--cinza);border-radius:8px;font:inherit;background:#fff;color:var(--azul-noite);width:100%}
+.pp-campo [aria-invalid="true"]{border-color:#B42318}
+.pp-msg-erro{color:#B42318;font-size:.9rem;font-weight:600;min-height:1.2rem;margin:0}
+.pp-status{font-weight:600;margin:1rem 0 0;min-height:1.5rem}
+.pp-contato .pp-enviar:disabled{opacity:.6;cursor:wait}
+</style>
+<div class="pp-contato">
+<h2>Vamos conversar?</h2>
+<p class="pp-sub">Conte um pouco sobre o seu neg&oacute;cio. Se voc&ecirc; fez o question&aacute;rio, o servi&ccedil;o recomendado j&aacute; vem selecionado.</p>
+<form id="pp-form-contato" novalidate>
+<div class="pp-campo"><label for="pp-nome">Nome</label><input id="pp-nome" name="nome" type="text" autocomplete="name" required aria-describedby="pp-nome-erro"><p id="pp-nome-erro" class="pp-msg-erro"></p></div>
+<div class="pp-campo"><label for="pp-email">E-mail</label><input id="pp-email" name="email" type="email" autocomplete="email" required aria-describedby="pp-email-erro"><p id="pp-email-erro" class="pp-msg-erro"></p></div>
+<div class="pp-campo"><label for="pp-servico">Servi&ccedil;o de interesse</label><select id="pp-servico" name="servico"><option>Ainda n&atilde;o sei</option><option>Identidade Visual</option><option>Social Media</option><option>Site Express</option><option>Pacote Completo</option></select></div>
+<div class="pp-campo"><label for="pp-mensagem">Mensagem (opcional)</label><textarea id="pp-mensagem" name="mensagem" rows="4"></textarea></div>
+<button type="submit" class="pp-enviar">Enviar mensagem</button>
+<p id="pp-status" class="pp-status" role="status" aria-live="polite"></p>
+</form>
+</div>
+<script>
+(function(){
+var WEBHOOK_URL='COLE_AQUI_A_URL_DO_WEBHOOK'; // cole aqui a URL do webhook (Make, n8n, Formspree...)
+var f=document.getElementById('pp-form-contato');if(!f)return;
+var st=document.getElementById('pp-status'),sel=document.getElementById('pp-servico');
+[].forEach.call(document.querySelectorAll('[data-interesse]'),function(a){a.addEventListener('click',function(){sel.value=a.getAttribute('data-interesse')})});
+function marcar(campo,msg){document.getElementById(campo.id+'-erro').textContent=msg;campo.setAttribute('aria-invalid',msg?'true':'false');return !msg}
+f.addEventListener('submit',function(ev){
+ev.preventDefault();
+var nome=document.getElementById('pp-nome'),email=document.getElementById('pp-email'),primeiro=null;
+var okN=marcar(nome,nome.value.trim().length<2?'Informe o seu nome.':'');
+var okE=marcar(email,/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())?'':'Informe um e-mail válido.');
+if(!okN||!okE){st.textContent='Corrija os campos destacados.';(okN?email:nome).focus();return;}
+var dados={nome:nome.value.trim(),email:email.value.trim(),servico:sel.value,mensagem:document.getElementById('pp-mensagem').value.trim(),recomendacao:window.ppRecomendacao||'',enviadoEm:new Date().toISOString()};
+var btn=f.querySelector('button[type=submit]');btn.disabled=true;st.textContent='Enviando...';
+var envio=WEBHOOK_URL?fetch(WEBHOOK_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams(dados)}):Promise.resolve();
+envio.then(function(){st.textContent='Mensagem enviada! Retornamos em breve.'+(WEBHOOK_URL?'':' (modo demonstração: nenhum webhook configurado)');f.reset();})
+.catch(function(){st.textContent='Não foi possível enviar agora. Tente novamente em instantes.';})
+.then(function(){btn.disabled=false;});
+});
+})();
+</script>
