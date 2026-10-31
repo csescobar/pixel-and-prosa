@@ -1,0 +1,18 @@
+<style>
+.pp-como{padding:clamp(3rem,8vw,5rem) var(--espaco);max-width:1100px;margin:0 auto}
+.pp-como h2{font-size:clamp(1.6rem,4vw,2.5rem);margin:0 0 .5rem}
+.pp-passos{counter-reset:passo;list-style:none;padding:0;margin:2rem 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:1.5rem}
+.pp-passos li{counter-increment:passo;position:relative;padding:.25rem 0 .25rem 4rem}
+.pp-passos li::before{content:counter(passo);position:absolute;left:0;top:0;width:3rem;height:3rem;border-radius:50%;background:var(--menta);color:var(--azul-noite);font-family:var(--fonte-titulo);font-weight:700;font-size:1.25rem;display:grid;place-items:center}
+.pp-passos h3{margin:0 0 .35rem;font-size:1.2rem}
+.pp-passos p{margin:0;color:var(--cinza)}
+</style>
+<div class="pp-como">
+<h2>Como funciona</h2>
+<p class="pp-sub">Um processo simples, do primeiro contato &agrave; entrega.</p>
+<ol class="pp-passos">
+<li><h3>Conversa</h3><p>Voc&ecirc; conta sobre o seu neg&oacute;cio, seu p&uacute;blico e o que quer alcan&ccedil;ar.</p></li>
+<li><h3>Proposta</h3><p>Montamos um plano claro, com escopo, prazos e valores combinados.</p></li>
+<li><h3>Entrega</h3><p>Desenvolvemos, ajustamos com voc&ecirc; e entregamos tudo pronto para usar.</p></li>
+</ol>
+</div>
